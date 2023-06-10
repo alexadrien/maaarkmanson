@@ -61,8 +61,8 @@ function App() {
         ))}
       </Box>
       <Box
-        sx={{
-          position: "absolute",
+        sx={(theme) => ({
+          position: "fixed",
           bottom: 0,
           left: 0,
           right: 0,
@@ -71,8 +71,9 @@ function App() {
           padding: "10px 20px",
           display: "flex",
           justifyContent: "space-between",
+          background: theme.palette.background.default,
           alignItems: "center",
-        }}
+        })}
       >
         <TextField
           multiline
