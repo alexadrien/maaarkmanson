@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   AppBar,
   Box,
@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import axios from "axios";
 
 const TWITTER_URL = "https://twitter.com/MaaarkManson";
 
@@ -22,31 +23,46 @@ type History = Array<Message>;
 function App() {
   const [message, setMessage] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
-  const [history, setHistory] = useState<History>([
-    { author: "Human", content: "Oh Hi Mark!" },
-    { author: "Mark", content: "Hello there, how can I help?" },
-    { author: "Human", content: "Who are you?" },
-    { author: "Mark", content: "Mark Manson. And you?" },
-  ]);
+  const [history, setHistory] = useState<History>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const onSend = () => {
+  const onSend = async () => {
     if (!message) return;
-    setHistory([...history, { author: "Human", content: message }]);
+    const newHistory = [
+      ...history,
+      { author: "Human", content: message } as Message,
+    ];
+    setHistory(newHistory);
     setLoading(true);
     setMessage("");
+    await axios
+      .post("/.netlify/functions/completions", {
+        history,
+      })
+      .then((res) => res.data)
+      .then((data) => {
+        setHistory([
+          ...newHistory,
+          { author: "Mark", content: data.resB.text },
+        ]);
+        setLoading(false);
+        inputRef.current?.focus();
+      })
+      .catch(console.error);
   };
 
   return (
     <Box sx={{ minHeight: "100vh", maxWidth: "400px", position: "relative" }}>
       <Box>
-        <AppBar position="static">
+        <AppBar>
           MAAARK MANSON
           <OpenInNewIcon onClick={() => window.open(TWITTER_URL, "_blank")} />
         </AppBar>
       </Box>
-      <Box>
-        {history.map((message) => (
+      <Box sx={{ marginTop: "65px", marginBottom: "75px" }}>
+        {history.map((message, index) => (
           <Box
+            key={index}
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -76,6 +92,7 @@ function App() {
         })}
       >
         <TextField
+          ref={inputRef}
           multiline
           maxRows={10}
           disabled={loading}
