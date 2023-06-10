@@ -20,6 +20,7 @@ export const theme = createTheme({
     MuiAppBar: {
       defaultProps: {
         color: "transparent",
+        position: "fixed",
       },
       styleOverrides: {
         root: {
@@ -31,6 +32,7 @@ export const theme = createTheme({
           display: "flex",
           justifyContent: "space-between",
           flexDirection: "row",
+          background: "#DAE5E6",
         },
       },
     },
