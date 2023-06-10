@@ -8,6 +8,9 @@ import {
   Typography,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+
+const TWITTER_URL = "https://twitter.com/MaaarkManson";
 
 type Message = {
   author: "Human" | "Mark";
@@ -36,7 +39,10 @@ function App() {
   return (
     <Box sx={{ minHeight: "100vh", maxWidth: "400px", position: "relative" }}>
       <Box>
-        <AppBar position="static">MAAARK MANSON</AppBar>
+        <AppBar position="static">
+          MAAARK MANSON
+          <OpenInNewIcon onClick={() => window.open(TWITTER_URL, "_blank")} />
+        </AppBar>
       </Box>
       <Box>
         {history.map((message) => (
