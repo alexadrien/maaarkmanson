@@ -37,7 +37,7 @@ function App() {
     setMessage("");
     await axios
       .post("/.netlify/functions/completions", {
-        history,
+        history: newHistory,
       })
       .then((res) => res.data)
       .then((data) => {
