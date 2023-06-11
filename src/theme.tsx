@@ -62,5 +62,15 @@ export const theme = createTheme({
         },
       },
     },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          padding: "8px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        },
+      },
+    },
   },
 });
