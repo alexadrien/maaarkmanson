@@ -2,7 +2,9 @@ import React, { useRef, useState } from "react";
 import {
   AppBar,
   Box,
+  Button,
   CircularProgress,
+  Dialog,
   Fab,
   TextField,
   Typography,
@@ -25,9 +27,17 @@ function App() {
   const [loading, setLoading] = useState<boolean>(false);
   const [history, setHistory] = useState<History>([]);
   const inputRef = useRef<HTMLInputElement>(null);
+  const params = new URLSearchParams(window.location.search);
+  const openAIApiKey = params.get("openAIApiKey");
+  const [apiKey, setApiKey] = useState<string>(openAIApiKey || "");
+  const [isDialogOpened, setDialogState] = useState<boolean>(false);
 
   const onSend = async () => {
     if (!message) return;
+    if (!apiKey) {
+      setDialogState(true);
+    }
+
     const newHistory = [
       ...history,
       { author: "Human", content: message } as Message,
@@ -38,6 +48,7 @@ function App() {
     await axios
       .post("/.netlify/functions/completions", {
         history: newHistory,
+        openAIApiKey,
       })
       .then((res) => res.data)
       .then((data) => {
@@ -48,7 +59,10 @@ function App() {
         setLoading(false);
         inputRef.current?.focus();
       })
-      .catch(console.error);
+      .catch(() => {
+        if (!apiKey) return;
+        window.open(window.location.origin);
+      });
   };
 
   return (
@@ -103,6 +117,23 @@ function App() {
           {loading ? <CircularProgress /> : <SendIcon />}
         </Fab>
       </Box>
+      <Dialog open={isDialogOpened}>
+        <Typography variant={"body1"}>
+          You need an API key from OpenAI to continue.
+        </Typography>
+        <TextField
+          placeholder={"OpenAI Api Key"}
+          value={apiKey}
+          onChange={(event) => setApiKey(event.target.value)}
+        />
+        <Button
+          onClick={() =>
+            window.open(`${window.location.origin}?openAIApiKey=${apiKey}`)
+          }
+        >
+          Continue
+        </Button>
+      </Dialog>
     </Box>
   );
 }
