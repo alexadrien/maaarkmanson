@@ -36,6 +36,7 @@ function App() {
     if (!message) return;
     if (!apiKey) {
       setDialogState(true);
+      return;
     }
 
     const newHistory = [
@@ -61,8 +62,7 @@ function App() {
       })
       .catch((e) => {
         console.error(e);
-        if (!apiKey) return;
-        window.open(window.location.origin);
+        window.alert("Something went wrong, sorry, I'll look into that.");
       });
   };
 
