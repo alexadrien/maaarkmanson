@@ -5,6 +5,9 @@ import {
   HumanChatMessage,
   SystemChatMessage,
 } from "langchain/schema";
+import { OpenAIEmbeddings } from "langchain/embeddings";
+import { PineconeClient } from "@pinecone-database/pinecone";
+import { PineconeStore } from "langchain/vectorstores/pinecone";
 
 type CompletionAPIRequestBody = {
   openAIApiKey: string;
@@ -23,6 +26,23 @@ export const handler: Handler = async (event) => {
   const parsedBody = JSON.parse(body) as CompletionAPIRequestBody;
   if (!parsedBody.openAIApiKey) return { statusCode: 500 };
 
+  const client = new PineconeClient();
+  await client.init({
+    apiKey: process.env.PINECONE_API_KEY || "",
+    environment: process.env.PINECONE_ENVIRONMENT || "",
+  });
+  const pineconeIndex = client.Index(process.env.PINECONE_INDEX || "");
+
+  const vectorStore = await PineconeStore.fromExistingIndex(
+    new OpenAIEmbeddings(),
+    { pineconeIndex }
+  );
+
+  const resultOne = await vectorStore.similaritySearch(
+    parsedBody.history[parsedBody.history.length - 1].content,
+    1
+  );
+
   try {
     const chat = new ChatOpenAI({
       temperature: 1,
@@ -39,6 +59,10 @@ export const handler: Handler = async (event) => {
           ? new HumanChatMessage(message.content)
           : new AIChatMessage(message.content)
       ),
+      new SystemChatMessage(`Use this text document as an inspiration for your next message:
+
+      ${resultOne.length > 0 ? resultOne[0].pageContent : ""}”
+      `),
     ]);
 
     return {
