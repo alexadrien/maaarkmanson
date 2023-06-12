@@ -54,12 +54,13 @@ function App() {
       .then((data) => {
         setHistory([
           ...newHistory,
-          { author: "Mark", content: data.resB.text },
+          { author: "Mark", content: data.aiResponse },
         ]);
         setLoading(false);
         inputRef.current?.focus();
       })
-      .catch(() => {
+      .catch((e) => {
+        console.error(e);
         if (!apiKey) return;
         window.open(window.location.origin);
       });
