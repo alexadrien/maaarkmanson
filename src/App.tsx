@@ -87,7 +87,14 @@ function App() {
             }}
           >
             <Typography variant={"overline"}>{message.author}:</Typography>
-            <Typography variant={"body1"}>{message.content}</Typography>
+            <Typography
+              variant={"body1"}
+              sx={{
+                fontWeight: message.author === "Human" ? "bold" : "regular",
+              }}
+            >
+              {message.content}
+            </Typography>
           </Box>
         ))}
       </Box>
