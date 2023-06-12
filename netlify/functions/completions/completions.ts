@@ -48,6 +48,11 @@ export const handler: Handler = async (event) => {
       temperature: 1,
       openAIApiKey: parsedBody.openAIApiKey,
     });
+    const systemChatIndication =
+      new SystemChatMessage(`Use this text document as an inspiration for your next message if relevant:
+
+      ${resultOne.length > 0 ? resultOne[0].pageContent : ""}”
+      `);
     const response = await chat.call([
       new SystemChatMessage(
         `You are an AI Therapist called Mark Manson.
@@ -59,10 +64,7 @@ export const handler: Handler = async (event) => {
           ? new HumanChatMessage(message.content)
           : new AIChatMessage(message.content)
       ),
-      new SystemChatMessage(`Use this text document as an inspiration for your next message:
-
-      ${resultOne.length > 0 ? resultOne[0].pageContent : ""}”
-      `),
+      systemChatIndication,
     ]);
 
     return {
@@ -70,6 +72,7 @@ export const handler: Handler = async (event) => {
       body: JSON.stringify({
         parsedBody,
         response,
+        systemChatIndication,
         aiResponse: response.text,
       }),
     };
