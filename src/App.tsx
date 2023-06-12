@@ -61,13 +61,16 @@ function App() {
         inputRef.current?.focus();
       })
       .catch((e) => {
+        setLoading(false);
+        setMessage(message);
+        setHistory(history);
         console.error(e);
         window.alert("Something went wrong, sorry, I'll look into that.");
       });
   };
 
   return (
-    <Box sx={{ minHeight: "100vh", maxWidth: "400px", position: "relative" }}>
+    <Box sx={{ maxWidth: "400px", position: "relative" }}>
       <Box>
         <AppBar>
           MAAARK MANSON
