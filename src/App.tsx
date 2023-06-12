@@ -89,6 +89,7 @@ function App() {
             <Typography variant={"overline"}>{message.author}:</Typography>
             <Typography
               variant={"body1"}
+              align={message.author === "Human" ? "right" : "left"}
               sx={{
                 fontWeight: message.author === "Human" ? "bold" : "regular",
               }}
