@@ -1,12 +1,10 @@
 import { Handler } from "@netlify/functions";
 import { ChatOpenAI } from "langchain/chat_models";
 import {
-  AIMessagePromptTemplate,
-  ChatPromptTemplate,
-  HumanMessagePromptTemplate,
-  SystemMessagePromptTemplate,
-} from "langchain/prompts";
-import { LLMChain } from "langchain";
+  AIChatMessage,
+  HumanChatMessage,
+  SystemChatMessage,
+} from "langchain/schema";
 
 type CompletionAPIRequestBody = {
   openAIApiKey: string;
@@ -30,28 +28,25 @@ export const handler: Handler = async (event) => {
       temperature: 1,
       openAIApiKey: parsedBody.openAIApiKey,
     });
-    const chatPrompt = ChatPromptTemplate.fromPromptMessages([
-      SystemMessagePromptTemplate.fromTemplate(
+    const response = await chat.call([
+      new SystemChatMessage(
         `You are an AI Therapist called Mark Manson.
         Your personality is based on Mark Manson, the real-life author.
         End every message with a self-reflecting question to the user.`
       ),
       ...parsedBody.history.map((message) =>
         message.author === "Human"
-          ? HumanMessagePromptTemplate.fromTemplate(message.content)
-          : AIMessagePromptTemplate.fromTemplate(message.content)
+          ? new HumanChatMessage(message.content)
+          : new AIChatMessage(message.content)
       ),
     ]);
-    const chainB = new LLMChain({ prompt: chatPrompt, llm: chat });
-    const resB = await chainB.call({});
 
     return {
       statusCode: 200,
       body: JSON.stringify({
         parsedBody,
-        resB,
-        chatPrompt,
-        aiResponse: resB.text,
+        response,
+        aiResponse: response.text,
       }),
     };
   } catch (e: any) {
