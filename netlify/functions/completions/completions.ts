@@ -34,7 +34,7 @@ export const handler: Handler = async (event) => {
   const pineconeIndex = client.Index(process.env.PINECONE_INDEX || "");
 
   const vectorStore = await PineconeStore.fromExistingIndex(
-    new OpenAIEmbeddings(),
+    new OpenAIEmbeddings({ openAIApiKey: parsedBody.openAIApiKey }),
     { pineconeIndex }
   );
 
