@@ -9,6 +9,7 @@ import "@fontsource/montserrat/700.css";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 import * as Sentry from "@sentry/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 Sentry.init({
   dsn: "https://851ae6be07ab44cfa19d751b22a87130@o4505346053308416.ingest.sentry.io/4505346054356992",
@@ -26,14 +27,18 @@ Sentry.init({
   replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
 });
 
+const queryClient = new QueryClient();
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <App />
+      <QueryClientProvider client={queryClient}>
+        <CssBaseline />
+        <App />
+      </QueryClientProvider>
     </ThemeProvider>
   </React.StrictMode>
 );
