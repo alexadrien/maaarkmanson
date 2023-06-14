@@ -11,7 +11,8 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { useMutation } from "@tanstack/react-query";
 
 const TWITTER_URL = "https://twitter.com/MaaarkManson";
 
@@ -32,6 +33,38 @@ function App() {
   const [apiKey, setApiKey] = useState<string>(openAIApiKey || "");
   const [isDialogOpened, setDialogState] = useState<boolean>(false);
 
+  type MutationData = { aiResponse: string };
+  type MutationError = AxiosError;
+  type MutationVariables = {
+    newHistory: History;
+    openAIApiKey: string;
+    message: string;
+    history: History;
+  };
+  const mutation = useMutation<MutationData, MutationError, MutationVariables>({
+    mutationFn: ({ newHistory, openAIApiKey }) =>
+      axios
+        .post("/.netlify/functions/completions", {
+          history: newHistory,
+          openAIApiKey,
+          message,
+        })
+        .then((res) => res.data),
+    retry: 3,
+    onError: (error, { message, history }, context) => {
+      debugger;
+      setLoading(false);
+      setMessage(message);
+      setHistory(history);
+      window.alert("Something went wrong, sorry, I'll look into that.");
+    },
+    onSuccess: (data) => {
+      setHistory([...history, { author: "Mark", content: data.aiResponse }]);
+      setLoading(false);
+      inputRef.current?.focus();
+    },
+  });
+
   const onSend = async () => {
     if (!message) return;
     if (!apiKey) {
@@ -46,27 +79,7 @@ function App() {
     setHistory(newHistory);
     setLoading(true);
     setMessage("");
-    await axios
-      .post("/.netlify/functions/completions", {
-        history: newHistory,
-        openAIApiKey,
-      })
-      .then((res) => res.data)
-      .then((data) => {
-        setHistory([
-          ...newHistory,
-          { author: "Mark", content: data.aiResponse },
-        ]);
-        setLoading(false);
-        inputRef.current?.focus();
-      })
-      .catch((e) => {
-        setLoading(false);
-        setMessage(message);
-        setHistory(history);
-        console.error(e);
-        window.alert("Something went wrong, sorry, I'll look into that.");
-      });
+    mutation.mutate({ newHistory, openAIApiKey: apiKey, message, history });
   };
 
   return (
