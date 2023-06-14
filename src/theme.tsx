@@ -20,7 +20,6 @@ export const theme = createTheme({
     MuiAppBar: {
       defaultProps: {
         color: "transparent",
-        position: "fixed",
       },
       styleOverrides: {
         root: {
@@ -54,14 +53,6 @@ export const theme = createTheme({
         color: "secondary",
       },
     },
-    MuiContainer: {
-      styleOverrides: {
-        root: {
-          padding: "0px",
-          margin: "0px",
-        },
-      },
-    },
     MuiDialog: {
       styleOverrides: {
         paper: {
@@ -69,6 +60,13 @@ export const theme = createTheme({
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+        },
+      },
+    },
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          margin: "0px",
         },
       },
     },

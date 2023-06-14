@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
 import {
-  AppBar,
   Box,
   Button,
   CircularProgress,
+  Container,
   Dialog,
   Fab,
   TextField,
@@ -70,14 +70,32 @@ function App() {
   };
 
   return (
-    <Box sx={{ maxWidth: "400px", position: "relative" }}>
-      <Box>
-        <AppBar>
-          MAAARK MANSON
-          <OpenInNewIcon onClick={() => window.open(TWITTER_URL, "_blank")} />
-        </AppBar>
+    <Container
+      maxWidth={"sm"}
+      disableGutters
+      sx={{
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+      }}
+    >
+      <Box
+        sx={{
+          padding: 2,
+          paddingLeft: 2,
+          fontWeight: "bold",
+          boxShadow: "none",
+          borderBottom: "solid 1px black",
+          display: "flex",
+          justifyContent: "space-between",
+          flexDirection: "row",
+        }}
+      >
+        MAAARK MANSON
+        <OpenInNewIcon onClick={() => window.open(TWITTER_URL, "_blank")} />
       </Box>
-      <Box sx={{ marginTop: "65px", marginBottom: "75px" }}>
+      <Box sx={{ flexGrow: 1 }}>
         {history.map((message, index) => (
           <Box
             key={index}
@@ -104,13 +122,9 @@ function App() {
       </Box>
       <Box
         sx={(theme) => ({
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
           borderTop: "solid 1px black",
           width: "100%",
-          padding: "10px 20px",
+          padding: 2,
           display: "flex",
           justifyContent: "space-between",
           background: theme.palette.background.default,
@@ -146,7 +160,7 @@ function App() {
           Continue
         </Button>
       </Dialog>
-    </Box>
+    </Container>
   );
 }
 
