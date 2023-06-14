@@ -49,7 +49,7 @@ export const handler: Handler = async (event) => {
       openAIApiKey: parsedBody.openAIApiKey,
     });
     const systemChatIndication =
-      new SystemChatMessage(`Use this text document as an inspiration for your next message if relevant:
+      new SystemChatMessage(`Use this text document as an inspiration for your next message if relevant to the previous message of the user:
 
       ${resultOne.length > 0 ? resultOne[0].pageContent : ""}”
       `);
@@ -57,14 +57,17 @@ export const handler: Handler = async (event) => {
       new SystemChatMessage(
         `You are an AI Therapist called Mark Manson.
         Your personality is based on Mark Manson, the real-life author.
-        End every message with a self-reflecting question to the user.`
+        Your messages should imitate the way Mark Manson write his content.
+        End every message with a self-reflecting question to the user.
+        Use patient's first name everytime it is possible.
+        Start by asking for the patient's first name.`
       ),
+      systemChatIndication,
       ...parsedBody.history.map((message) =>
         message.author === "Human"
           ? new HumanChatMessage(message.content)
           : new AIChatMessage(message.content)
       ),
-      systemChatIndication,
     ]);
 
     return {
