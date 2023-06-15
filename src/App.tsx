@@ -11,17 +11,11 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import axios, { AxiosError } from "axios";
-import { useMutation } from "@tanstack/react-query";
+import { History, Message } from "./types";
+import { useSearchResult } from "./useSearchResult";
+import { useCompletions } from "./useCompletions";
 
 const TWITTER_URL = "https://twitter.com/MaaarkManson";
-
-type Message = {
-  author: "Human" | "Mark";
-  content: string;
-};
-
-type History = Array<Message>;
 
 function App() {
   const [message, setMessage] = useState<string>();
@@ -32,38 +26,8 @@ function App() {
   const openAIApiKey = params.get("openAIApiKey");
   const [apiKey, setApiKey] = useState<string>(openAIApiKey || "");
   const [isDialogOpened, setDialogState] = useState<boolean>(false);
-
-  type MutationData = { aiResponse: string };
-  type MutationError = AxiosError;
-  type MutationVariables = {
-    newHistory: History;
-    openAIApiKey: string;
-    message: string;
-    history: History;
-  };
-  const mutation = useMutation<MutationData, MutationError, MutationVariables>({
-    mutationFn: ({ newHistory, openAIApiKey }) =>
-      axios
-        .post("/.netlify/functions/completions", {
-          history: newHistory,
-          openAIApiKey,
-          message,
-        })
-        .then((res) => res.data),
-    retry: 3,
-    onError: (error, { message, history }, context) => {
-      debugger;
-      setLoading(false);
-      setMessage(message);
-      setHistory(history);
-      window.alert("Something went wrong, sorry, I'll look into that.");
-    },
-    onSuccess: (data) => {
-      setHistory([...history, { author: "Mark", content: data.aiResponse }]);
-      setLoading(false);
-      inputRef.current?.focus();
-    },
-  });
+  const getSearchResults = useSearchResult();
+  const getCompletions = useCompletions();
 
   const onSend = async () => {
     if (!message) return;
@@ -79,7 +43,11 @@ function App() {
     setHistory(newHistory);
     setLoading(true);
     setMessage("");
-    mutation.mutate({ newHistory, openAIApiKey: apiKey, message, history });
+    const searchResults = await getSearchResults(newHistory, apiKey);
+    const response = await getCompletions(searchResults, apiKey, newHistory);
+    setHistory([...newHistory, { author: "Mark", content: response }]);
+    setLoading(false);
+    inputRef.current?.scrollIntoView();
   };
 
   return (
