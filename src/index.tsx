@@ -10,6 +10,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 import * as Sentry from "@sentry/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "./index.css";
 
 Sentry.init({
   dsn: "https://851ae6be07ab44cfa19d751b22a87130@o4505346053308416.ingest.sentry.io/4505346054356992",
