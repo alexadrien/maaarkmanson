@@ -5,7 +5,9 @@ particularly in the realm of conversational agents. Inspired by the works of Mar
 Manson is a psychotherapist designed to emulate his knowledge and insights, providing users with an engaging and
 informative conversation experience.
 
-![img.png](img.png)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/alexadrien/maaarkmanson/master/img.png?raw=true" alt="Maaark"/>
+</p>
 
 Twitter : https://twitter.com/MaaarkManson
 
