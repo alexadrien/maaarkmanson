@@ -117,6 +117,7 @@ function App() {
         <TextField
           ref={inputRef}
           multiline
+          placeholder={"Oh Hi Maaark!\nMy name is"}
           maxRows={10}
           minRows={2}
           disabled={loading}
