@@ -38,7 +38,6 @@ export const theme = createTheme({
     MuiTextField: {
       defaultProps: {
         variant: "standard",
-        placeholder: "Oh Hi Mark",
       },
       styleOverrides: {
         root: {
