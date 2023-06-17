@@ -59,6 +59,7 @@ function App() {
         display: "flex",
         flexDirection: "column",
         minHeight: "100%",
+        maxHeight: "100%",
       }}
     >
       <Box
@@ -76,7 +77,7 @@ function App() {
         MAAARK MANSON
         <OpenInNewIcon onClick={() => window.open(TWITTER_URL, "_blank")} />
       </Box>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box sx={{ flexGrow: 1, overflow: "scroll" }}>
         {history.map((message, index) => (
           <Box
             key={index}
