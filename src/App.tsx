@@ -95,6 +95,7 @@ function App() {
               align={message.author === "Human" ? "right" : "left"}
               sx={{
                 fontWeight: message.author === "Human" ? "bold" : "regular",
+                whiteSpace: "break-spaces",
               }}
             >
               {message.content}
