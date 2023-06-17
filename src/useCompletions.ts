@@ -31,6 +31,7 @@ export const useCompletions = () => {
         Start by asking for the user's first name.
         When using a quote from Mark Manson, answer using 'I' statements.
         Always respond with a message which is as long as the previous user message.
+        All your messages should have only one question per message.
         Use the quote from Mark Manson delimited by triple quotes as an inspiration for your next message if relevant to the last user message:
         
         """${searchResult}"""`
