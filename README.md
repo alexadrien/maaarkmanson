@@ -41,6 +41,14 @@ Features
 - **Open-Source**: Maaark Manson is an open-source project, welcoming contributions from the community. The codebase is
   publicly available, allowing users to inspect, modify, and improve the project as they see fit.
 
+# How it works
+
+C4Model Diagram :
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/alexadrien/maaarkmanson/master/img_1.png?raw=true" alt="Structurizr Schema"/>
+</p>
+
 # Installation
 
 To install and run Maaark Manson locally, please follow these steps:
