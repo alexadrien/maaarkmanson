@@ -5,8 +5,10 @@ import {
 } from "langchain/schema";
 import { History, Message } from "./types";
 import { ChatOpenAI } from "langchain/chat_models/openai";
+import { useNewPlaceholder } from "./atoms";
 
 export const useCompletions = () => {
+  const setPlaceholder = useNewPlaceholder();
   return async (
     searchResults: string[],
     openAIApiKey: string,
@@ -22,6 +24,7 @@ export const useCompletions = () => {
         ? new HumanChatMessage(message.content)
         : new AIChatMessage(message.content);
     for (let i = 0; i < searchResults.length; i++) {
+      setPlaceholder("Writing option " + (i + 1));
       const searchResult = searchResults[i];
       const chatResponse = await chat.call([
         new SystemChatMessage(
@@ -52,6 +55,7 @@ export const useCompletions = () => {
       chatResponses.push(chatResponse.text);
     }
 
+    setPlaceholder("Finding the best message");
     const finalChatResponse = await chat.call([
       new SystemChatMessage(
         `You are an AI Therapist called Mark Manson.
@@ -76,6 +80,7 @@ export const useCompletions = () => {
       ),
     ]);
 
+    setPlaceholder("Oh Hi Maaark!\nMy name is");
     return finalChatResponse.text;
   };
 };

@@ -3,8 +3,10 @@ import axios from "axios";
 import { History } from "./types";
 import { SystemChatMessage } from "langchain/schema";
 import { ChatOpenAI } from "langchain/chat_models/openai";
+import { useNewPlaceholder } from "./atoms";
 
 export const useSearchResult = () => {
+  const setPlaceholder = useNewPlaceholder();
   const searchMutation = useMutation<
     { searchResult: string },
     unknown,
@@ -23,6 +25,7 @@ export const useSearchResult = () => {
       temperature: 1,
       openAIApiKey,
     });
+    setPlaceholder("Understanding your message");
     const searchSimilarityQuery = await chat.call([
       new SystemChatMessage(
         `You are a super smart AI therapist. Your personality is based on Mark Manson's.
@@ -38,6 +41,7 @@ export const useSearchResult = () => {
     ]);
     const listOfqueries = searchSimilarityQuery.text.split("\n");
     const searchResults = [];
+    setPlaceholder("Searching Maaark's brain");
     for (let i = 0; i < listOfqueries.length; i++) {
       const currentQuery = listOfqueries[i];
       const { searchResult } = await searchMutation.mutateAsync({
