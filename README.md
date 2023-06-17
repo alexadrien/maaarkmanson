@@ -1,5 +1,7 @@
 # Maaark Manson
 
+![img.png](img.png)
+
 Maaark Manson is an open-source project aimed at exploring the world of artificial intelligence and its applications,
 particularly in the realm of conversational agents. Inspired by the works of Mark Manson, the renowned author, Maaark
 Manson is a psychotherapist designed to emulate his knowledge and insights, providing users with an engaging and
