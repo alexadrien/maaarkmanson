@@ -49,6 +49,10 @@ C4Model Diagram :
   <img src="https://raw.githubusercontent.com/alexadrien/maaarkmanson/master/img_1.png?raw=true" alt="Structurizr Schema"/>
 </p>
 
+<p align="center">
+  <img src="https://static.swimlanes.io/9665609e271cf32b63d8df339fbd4cf0.png" alt="Sequential Diagram"/>
+</p>
+
 # Installation
 
 To install and run Maaark Manson locally, please follow these steps:
