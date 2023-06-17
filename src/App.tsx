@@ -21,9 +21,9 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 const TWITTER_URL = "https://twitter.com/MaaarkManson";
 
 function App() {
-  const [message, setMessage] = useState<string>();
+  const [savedHistory, savedMessage, deleteHistory] = useGetFromLocalStorage();
+  const [message, setMessage] = useState<string>(savedMessage);
   const [loading, setLoading] = useState<boolean>(false);
-  const [savedHistory, deleteHistory] = useGetFromLocalStorage();
   const [history, setHistory] = useState<History>(savedHistory);
   useSaveToLocalStorage(history);
   const inputRef = useRef<HTMLInputElement>(null);
