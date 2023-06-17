@@ -14,13 +14,18 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { History, Message } from "./types";
 import { useSearchResult } from "./useSearchResult";
 import { useCompletions } from "./useCompletions";
+import { useSaveToLocalStorage } from "./useSaveToLocalStorage";
+import { useGetFromLocalStorage } from "./useGetFromLocalStorage";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 const TWITTER_URL = "https://twitter.com/MaaarkManson";
 
 function App() {
   const [message, setMessage] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
-  const [history, setHistory] = useState<History>([]);
+  const [savedHistory, deleteHistory] = useGetFromLocalStorage();
+  const [history, setHistory] = useState<History>(savedHistory);
+  useSaveToLocalStorage(history);
   const inputRef = useRef<HTMLInputElement>(null);
   const params = new URLSearchParams(window.location.search);
   const openAIApiKey = params.get("openAIApiKey");
@@ -75,7 +80,17 @@ function App() {
         }}
       >
         MAAARK MANSON
-        <OpenInNewIcon onClick={() => window.open(TWITTER_URL, "_blank")} />
+        <Box
+          sx={{
+            width: "15%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <OpenInNewIcon onClick={() => window.open(TWITTER_URL, "_blank")} />
+          <RefreshIcon onClick={deleteHistory} />
+        </Box>
       </Box>
       <Box sx={{ flexGrow: 1, overflow: "scroll" }}>
         {history.map((message, index) => (
