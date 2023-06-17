@@ -6,6 +6,11 @@ import {
 import { History, Message } from "./types";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { useNewPlaceholder } from "./atoms";
+import {
+  FIND_BEST_MESSAGE,
+  INITIAL_SYSTEM_MESSAGE,
+  USE_QUOTE_SYSTEM_MESSAGE,
+} from "./prompts";
 
 export const useCompletions = () => {
   const setPlaceholder = useNewPlaceholder();
@@ -27,27 +32,9 @@ export const useCompletions = () => {
       setPlaceholder("Writing option " + (i + 1));
       const searchResult = searchResults[i];
       const chatResponse = await chat.call([
-        new SystemChatMessage(
-          `You are an AI Therapist called Mark Manson.
-          Your personality is based on Mark Manson, the real-life author.
-          Your messages should imitate the way Mark Manson write his content.
-          End every message with a self-reflecting question to the user.
-          Use patient's first name everytime it is possible.
-          When using a quote from Mark Manson, answer using 'I' statements.
-          Always respond with a message which is as long as the previous user message.
-          All your messages should have only one question per message.
-          Keep your messages short.
-          Start by asking for the user's first name.
-          `
-        ),
+        new SystemChatMessage(INITIAL_SYSTEM_MESSAGE),
         ...history.slice(0, history.length - 1).map(constructMessage),
-        new SystemChatMessage(
-          `Use the quote from you below delimited by triple quotes as an inspiration for your next message.
-          Only use it if relevant to the last user message.
-  
-        """${searchResult}"""
-        `
-        ),
+        new SystemChatMessage(USE_QUOTE_SYSTEM_MESSAGE(searchResult)),
         ...history
           .slice(history.length - 1, history.length)
           .map(constructMessage),
@@ -57,27 +44,9 @@ export const useCompletions = () => {
 
     setPlaceholder("Finding the best message");
     const finalChatResponse = await chat.call([
-      new SystemChatMessage(
-        `You are an AI Therapist called Mark Manson.
-          Your personality is based on Mark Manson, the real-life author.
-          Your messages should imitate the way Mark Manson write his content.
-          End every message with a self-reflecting question to the user.
-          Use patient's first name everytime it is possible.
-          When using a quote from Mark Manson, answer using 'I' statements.
-          Always respond with a message which is as long as the previous user message.
-          All your messages should have only one question per message.
-          Keep your messages short.
-          Your first message should ask for the user's first name.
-          `
-      ),
+      new SystemChatMessage(INITIAL_SYSTEM_MESSAGE),
       ...history.map(constructMessage),
-      new SystemChatMessage(
-        `Output the best message for the user between those below (each message is separated with three equal signs and should not be present in the output)
-          
-          Messages:
-          ${chatResponses.join("\n\n===\n\n")} 
-          `
-      ),
+      new SystemChatMessage(FIND_BEST_MESSAGE(chatResponses)),
     ]);
 
     setPlaceholder("Oh Hi Maaark!\nMy name is");

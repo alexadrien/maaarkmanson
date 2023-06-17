@@ -4,6 +4,7 @@ import { History } from "./types";
 import { SystemChatMessage } from "langchain/schema";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { useNewPlaceholder } from "./atoms";
+import { CREATE_SIMILARITY_SEARCH } from "./prompts";
 
 export const useSearchResult = () => {
   const setPlaceholder = useNewPlaceholder();
@@ -28,15 +29,7 @@ export const useSearchResult = () => {
     setPlaceholder("Understanding your message");
     const searchSimilarityQuery = await chat.call([
       new SystemChatMessage(
-        `You are a super smart AI therapist. Your personality is based on Mark Manson's.
-            You will be provided with a user message.
-            Your job is to produce a list of 3 search queries intended to be run over a vectorial database.
-            The database contains a lot of Mark Manson Quotes.
-            Each search query should be composed of 3 keywords separated by commas.
-            The list should not be numerated, no bullet point, just a plain line-by-line list. 
-            
-            Last User Message :
-            ${history[history.length - 1].content}`
+        CREATE_SIMILARITY_SEARCH(history[history.length - 1].content)
       ),
     ]);
     const listOfqueries = searchSimilarityQuery.text.split("\n");
