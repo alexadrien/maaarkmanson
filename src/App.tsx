@@ -17,6 +17,7 @@ import { useCompletions } from "./useCompletions";
 import { useSaveToLocalStorage } from "./useSaveToLocalStorage";
 import { useGetFromLocalStorage } from "./useGetFromLocalStorage";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import { usePlaceholder } from "./atoms";
 
 const TWITTER_URL = "https://twitter.com/MaaarkManson";
 
@@ -33,6 +34,7 @@ function App() {
   const [isDialogOpened, setDialogState] = useState<boolean>(false);
   const getSearchResults = useSearchResult();
   const getCompletions = useCompletions();
+  const placeholder = usePlaceholder();
 
   const onSend = async () => {
     if (!message) return;
@@ -132,7 +134,7 @@ function App() {
         <TextField
           ref={inputRef}
           multiline
-          placeholder={"Oh Hi Maaark!\nMy name is"}
+          placeholder={placeholder}
           maxRows={10}
           minRows={2}
           disabled={loading}
