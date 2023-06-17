@@ -27,21 +27,26 @@ export const useSearchResult = () => {
       new SystemChatMessage(
         `You are a super smart AI therapist. Your personality is based on Mark Manson's.
             You will be provided with a user message.
-            Your job is to produce a search query intended to be run over a vectorial database.
+            Your job is to produce a list of 5 search queries intended to be run over a vectorial database.
             The database contains a lot of Mark Manson Quotes.
-            The search query should only be keywords.
+            Each search query should be composed of 3 keywords separated by commas.
+            The list should not be numerated, no bullet point, just a plain line-by-line list. 
             
             Last User Message :
             ${history[history.length - 1].content}`
       ),
     ]);
-    const { searchResult } = await searchMutation.mutateAsync({
-      openAIApiKey,
-      history: [
-        ...history,
-        { author: "Mark", content: searchSimilarityQuery.text },
-      ],
-    });
-    return searchResult;
+    const listOfqueries = searchSimilarityQuery.text.split("\n");
+    const searchResults = [];
+    for (let i = 0; i < listOfqueries.length; i++) {
+      const currentQuery = listOfqueries[i];
+      const { searchResult } = await searchMutation.mutateAsync({
+        openAIApiKey,
+        history: [...history, { author: "Mark", content: currentQuery }],
+      });
+      searchResults.push(searchResult);
+    }
+
+    return searchResults;
   };
 };
