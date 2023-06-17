@@ -67,12 +67,12 @@ export const useCompletions = () => {
           Always respond with a message which is as long as the previous user message.
           All your messages should have only one question per message.
           Keep your messages short.
-          Start by asking for the user's first name.
+          Your first message should ask for the user's first name.
           `
       ),
       ...history.map(constructMessage),
       new SystemChatMessage(
-        `Output the best message for the user between those below (each message is separated with three equal signs)
+        `Output the best message for the user between those below (each message is separated with three equal signs and should not be present in the output)
           
           Messages:
           ${chatResponses.join("\n\n===\n\n")} 
