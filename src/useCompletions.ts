@@ -31,12 +31,19 @@ export const useCompletions = () => {
         Start by asking for the user's first name.
         When using a quote from Mark Manson, answer using 'I' statements.
         Always respond with a message which is as long as the previous user message.
-        All your messages should have only one question per message.
-        Use the quote from Mark Manson delimited by triple quotes as an inspiration for your next message if relevant to the last user message:
-        
-        """${searchResult}"""`
+        All your messages should have only one question per message.`
       ),
-      ...history.map(constructMessage),
+      ...history.slice(0, history.length - 1).map(constructMessage),
+      new SystemChatMessage(
+        `Use the quote from you below delimited by triple quotes as an inspiration for your next message.
+        Only use it if relevant to the last user message.
+
+      """${searchResult}"""
+      `
+      ),
+      ...history
+        .slice(history.length - 1, history.length)
+        .map(constructMessage),
     ]);
     return chatResponse.text;
   };
