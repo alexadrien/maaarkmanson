@@ -110,13 +110,14 @@ function App() {
           display: "flex",
           justifyContent: "space-between",
           background: theme.palette.background.default,
-          alignItems: "center",
+          alignItems: "flex-start",
         })}
       >
         <TextField
           ref={inputRef}
           multiline
           maxRows={10}
+          minRows={2}
           disabled={loading}
           value={message}
           onChange={(event) => setMessage(event.target.value)}
