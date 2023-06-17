@@ -17,7 +17,11 @@ Only use it if relevant to the last user message.
 """${quote}"""`;
 
 export const FIND_BEST_MESSAGE = (messages: Array<string>) => `Context:
-Output the best message for the user between those below (each message is separated with three equal signs and should not be present in the output
+Output the most relevant message for the user between the options below.
+Rules :  
+- Each message is separated with three equal signs.
+- Equal signs should not be present in the output
+- Asking for the user's first name is really appreciated
 
 Messages:
 ${messages.join("\n\n===\n\n")} 
