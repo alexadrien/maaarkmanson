@@ -47,7 +47,7 @@ To install and run Maaark Manson locally, please follow these steps:
 
 ```bash
 git clone https://github.com/alexadrien/maaarkmanson.git
-cd maaark-manson
+cd maaarkmanson
 npm install
 npm run dev
 ```
