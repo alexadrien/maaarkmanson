@@ -27,12 +27,14 @@ export const useSearchResult = () => {
       openAIApiKey,
     });
     setPlaceholder("Understanding your message");
+    const lastMessage = history[history.length - 1].content;
     const searchSimilarityQuery = await chat.call([
-      new SystemChatMessage(
-        CREATE_SIMILARITY_SEARCH(history[history.length - 1].content)
-      ),
+      new SystemChatMessage(CREATE_SIMILARITY_SEARCH(lastMessage)),
     ]);
-    const listOfqueries = searchSimilarityQuery.text.split("\n");
+    const listOfqueries = [
+      ...searchSimilarityQuery.text.split("\n"),
+      lastMessage,
+    ];
     const searchResults = [];
     setPlaceholder("Searching Maaark's brain");
     for (let i = 0; i < listOfqueries.length; i++) {
