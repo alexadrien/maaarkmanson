@@ -4,7 +4,7 @@ import { PineconeClient } from "@pinecone-database/pinecone";
 import { PineconeStore } from "langchain/vectorstores/pinecone";
 import { Response } from "@netlify/functions/dist/function/response";
 
-type CompletionAPIRequestBody = {
+type SimilaritySearchRequestBody = {
   openAIApiKey: string;
   history: Array<{
     author: "Human" | "Mark";
@@ -28,7 +28,7 @@ export const handler: Handler = async ({ httpMethod, body }) => {
 
   const { openAIApiKey, history } = JSON.parse(
     body
-  ) as CompletionAPIRequestBody;
+  ) as SimilaritySearchRequestBody;
   if (!openAIApiKey) return ErrorResponse(400, "Missing openAIApiKey");
   if (!history) return ErrorResponse(400, "Missing history");
 
