@@ -27,9 +27,11 @@ export const handler: Handler = async (event) => {
   const { body } = event;
   if (!body) return ErrorResponse(400, "Request as no payload");
 
-  const parsedBody = JSON.parse(body) as CompletionAPIRequestBody;
-  if (!parsedBody.openAIApiKey)
-    return ErrorResponse(400, "Missing openAIApiKey");
+  const { openAIApiKey, history } = JSON.parse(
+    body
+  ) as CompletionAPIRequestBody;
+  if (!openAIApiKey) return ErrorResponse(400, "Missing openAIApiKey");
+  if (!history) return ErrorResponse(400, "Missing history");
 
   const client = new PineconeClient();
   await client.init({
@@ -39,12 +41,12 @@ export const handler: Handler = async (event) => {
   const pineconeIndex = client.Index(process.env.PINECONE_INDEX || "");
 
   const vectorStore = await PineconeStore.fromExistingIndex(
-    new OpenAIEmbeddings({ openAIApiKey: parsedBody.openAIApiKey }),
+    new OpenAIEmbeddings({ openAIApiKey }),
     { pineconeIndex }
   );
 
   const resultOne = await vectorStore.similaritySearch(
-    parsedBody.history[parsedBody.history.length - 1].content,
+    history[history.length - 1].content,
     1
   );
 
