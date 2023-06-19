@@ -1,7 +1,7 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import { MessageLine } from "./MessageLine";
-import { History } from "./types";
+import { History } from "../types";
 
 type IProps = {
   history: History;

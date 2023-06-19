@@ -1,18 +1,18 @@
 import React, { useRef, useState } from "react";
 import { History, Message } from "./types";
-import { useGetSearchResult } from "./useGetSearchResult";
-import { useGetCompletions } from "./useGetCompletions";
-import { useSaveToLocalStorage } from "./useSaveToLocalStorage";
-import { useGetFromLocalStorage } from "./useGetFromLocalStorage";
+import { useGetSearchResult } from "./hooks/useGetSearchResult";
+import { useGetCompletions } from "./hooks/useGetCompletions";
+import { useSaveToLocalStorage } from "./hooks/useSaveToLocalStorage";
+import { useGetFromLocalStorage } from "./hooks/useGetFromLocalStorage";
 import { useTextFieldPlaceholder } from "./atoms";
-import { useOpenAIApiKeyFromQueryParams } from "./useOpenAIApiKeyFromQueryParams";
-import { Container } from "./Container";
-import { OpenAIApiKeyDialog } from "./OpenAIApiKeyDialog";
-import { SendButton } from "./SendButton";
-import { MessageTextField } from "./MessageTextField";
-import { RedactionBar } from "./RedactionBar";
-import { Messages } from "./Messages";
-import { AppBar } from "./AppBar";
+import { useOpenAIApiKeyFromQueryParams } from "./hooks/useOpenAIApiKeyFromQueryParams";
+import { Container } from "./components/Container";
+import { OpenAIApiKeyDialog } from "./components/OpenAIApiKeyDialog";
+import { SendButton } from "./components/SendButton";
+import { MessageTextField } from "./components/MessageTextField";
+import { RedactionBar } from "./components/RedactionBar";
+import { Messages } from "./components/Messages";
+import { AppBar } from "./components/AppBar";
 
 function App() {
   const openAIApiKey = useOpenAIApiKeyFromQueryParams();

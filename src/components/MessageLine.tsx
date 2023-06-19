@@ -1,7 +1,7 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
-import { Message } from "./types";
+import { Message } from "../types";
 
 type IProps = {
   index: number;

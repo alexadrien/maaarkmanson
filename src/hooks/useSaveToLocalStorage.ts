@@ -1,4 +1,4 @@
-import { History } from "./types";
+import { History } from "../types";
 import { useEffect } from "react";
 
 export const useSaveToLocalStorage = (history: History) => {

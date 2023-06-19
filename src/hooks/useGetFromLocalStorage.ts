@@ -1,4 +1,4 @@
-import { History } from "./types";
+import { History } from "../types";
 
 export const useGetFromLocalStorage = (): [History, string, () => void] => {
   let historyFromLocalStorage = JSON.parse(

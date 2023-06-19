@@ -1,10 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import { History } from "./types";
+import { History } from "../types";
 import { SystemChatMessage } from "langchain/schema";
 import { ChatOpenAI } from "langchain/chat_models/openai";
-import { useNewPlaceholder } from "./atoms";
-import { CREATE_SIMILARITY_SEARCH } from "./prompts";
+import { useNewPlaceholder } from "../atoms";
+import { CREATE_SIMILARITY_SEARCH } from "../prompts";
 
 export const useGetSearchResult = () => {
   const setPlaceholder = useNewPlaceholder();

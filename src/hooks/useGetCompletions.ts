@@ -3,14 +3,14 @@ import {
   HumanChatMessage,
   SystemChatMessage,
 } from "langchain/schema";
-import { History, Message } from "./types";
+import { History, Message } from "../types";
 import { ChatOpenAI } from "langchain/chat_models/openai";
-import { useNewPlaceholder } from "./atoms";
+import { useNewPlaceholder } from "../atoms";
 import {
   FIND_BEST_MESSAGE,
   INITIAL_SYSTEM_MESSAGE,
   USE_QUOTE_SYSTEM_MESSAGE,
-} from "./prompts";
+} from "../prompts";
 
 export const useGetCompletions = () => {
   const setPlaceholder = useNewPlaceholder();
