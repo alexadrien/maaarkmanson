@@ -12,6 +12,10 @@ type SimilaritySearchRequestBody = {
   }>;
 };
 
+const pineconeApiKey = process.env.PINECONE_API_KEY || "";
+const pineconeEnvironment = process.env.PINECONE_ENVIRONMENT || "";
+const pineconeIndexName = process.env.PINECONE_INDEX || "";
+
 const ErrorResponse: (code: number, message?: string) => Response = (
   statusCode,
   message: string = ""
@@ -33,27 +37,37 @@ export const handler: Handler = async ({ httpMethod, body }) => {
 
   const pineconeClient = new PineconeClient();
   await pineconeClient.init({
-    apiKey: process.env.PINECONE_API_KEY || "",
-    environment: process.env.PINECONE_ENVIRONMENT || "",
+    apiKey: pineconeApiKey,
+    environment: pineconeEnvironment,
   });
-  const pineconeIndex = pineconeClient.Index(process.env.PINECONE_INDEX || "");
+  const pineconeIndex = pineconeClient.Index(pineconeIndexName);
 
+  const openAIEmbeddings = new OpenAIEmbeddings({ openAIApiKey });
+  const dbConfig = { pineconeIndex };
   const vectorStore = await PineconeStore.fromExistingIndex(
-    new OpenAIEmbeddings({ openAIApiKey }),
-    { pineconeIndex }
+    openAIEmbeddings,
+    dbConfig
   );
 
-  const resultOne = await vectorStore.similaritySearch(
-    history[history.length - 1].content,
+  if (history.length < 1)
+    return ErrorResponse(400, "Not enough message in History");
+
+  const lastMessage = history[history.length - 1];
+  const lastMessageContent = lastMessage.content;
+  const similaritySearchResults = await vectorStore.similaritySearch(
+    lastMessageContent,
     1
   );
 
-  if (resultOne.length < 1) throw Error("No results");
+  if (similaritySearchResults.length < 1)
+    return ErrorResponse(500, "Similarity search did not return any results");
 
+  const firstSearchResult = similaritySearchResults[0];
+  const firstSearchResultContent = firstSearchResult.pageContent;
   return {
     statusCode: 200,
     body: JSON.stringify({
-      searchResult: resultOne[0].pageContent,
+      searchResult: firstSearchResultContent,
     }),
   };
 };
