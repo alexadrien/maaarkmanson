@@ -8,40 +8,46 @@ import { CREATE_SIMILARITY_SEARCH } from "../prompts";
 
 export const useGetSearchResult = () => {
   const setPlaceholder = useNewPlaceholder();
+
+  type SearchVariables = { openAIApiKey: string; history: History };
+  const searchFunction = ({ openAIApiKey, history }: SearchVariables) =>
+    axios
+      .post("/.netlify/functions/search", {
+        openAIApiKey,
+        history,
+      })
+      .then((res) => res.data);
   const searchMutation = useMutation<
     { searchResult: string },
     unknown,
-    { openAIApiKey: string; history: History }
+    SearchVariables
   >({
-    mutationFn: ({ openAIApiKey, history }) =>
-      axios
-        .post("/.netlify/functions/search", {
-          openAIApiKey,
-          history,
-        })
-        .then((res) => res.data),
+    mutationFn: searchFunction,
   });
+
   return async (history: History, openAIApiKey: string) => {
-    const chat = new ChatOpenAI({
-      temperature: 1,
-      openAIApiKey,
-    });
     setPlaceholder("Understanding your message");
-    const lastMessage = history[history.length - 1].content;
-    const searchSimilarityQuery = await chat.call([
-      new SystemChatMessage(CREATE_SIMILARITY_SEARCH(lastMessage)),
+    const chat = new ChatOpenAI({ temperature: 1, openAIApiKey });
+    const lastMessageContent = history[history.length - 1].content;
+    const queriesFromAi = await chat.call([
+      new SystemChatMessage(CREATE_SIMILARITY_SEARCH(lastMessageContent)),
     ]);
-    const listOfqueries = [
-      ...searchSimilarityQuery.text.split("\n"),
-      lastMessage,
+    const listOfQueries = [
+      ...queriesFromAi.text.split("\n"),
+      lastMessageContent,
     ];
     const searchResults = [];
+
     setPlaceholder("Searching Maaark's brain");
-    for (let i = 0; i < listOfqueries.length; i++) {
-      const currentQuery = listOfqueries[i];
+    for (let i = 0; i < listOfQueries.length; i++) {
+      const currentQuery = listOfQueries[i];
+      const newHistory: History = [
+        ...history,
+        { author: "Mark", content: currentQuery },
+      ];
       const { searchResult } = await searchMutation.mutateAsync({
         openAIApiKey,
-        history: [...history, { author: "Mark", content: currentQuery }],
+        history: newHistory,
       });
       searchResults.push(searchResult);
     }
