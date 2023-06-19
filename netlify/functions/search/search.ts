@@ -26,9 +26,8 @@ export const handler: Handler = async ({ httpMethod, body }) => {
 
   if (!body) return ErrorResponse(400, "Request as no payload");
 
-  const { openAIApiKey, history } = JSON.parse(
-    body
-  ) as SimilaritySearchRequestBody;
+  const requestBody = JSON.parse(body) as SimilaritySearchRequestBody;
+  const { openAIApiKey, history } = requestBody;
   if (!openAIApiKey) return ErrorResponse(400, "Missing openAIApiKey");
   if (!history) return ErrorResponse(400, "Missing history");
 
