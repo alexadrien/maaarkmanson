@@ -12,18 +12,24 @@ type CompletionAPIRequestBody = {
   }>;
 };
 
-const ErrorResponse: (code: number) => Response = (statusCode) => ({
+const ErrorResponse: (code: number, message?: string) => Response = (
   statusCode,
+  message: string = ""
+) => ({
+  statusCode,
+  body: message,
 });
 
 export const handler: Handler = async (event) => {
-  if (event.httpMethod !== "POST") return ErrorResponse(405);
+  if (event.httpMethod !== "POST")
+    return ErrorResponse(405, "Only POST Method allowed");
 
   const { body } = event;
-  if (!body) return ErrorResponse(400);
+  if (!body) return ErrorResponse(400, "Request as no payload");
 
   const parsedBody = JSON.parse(body) as CompletionAPIRequestBody;
-  if (!parsedBody.openAIApiKey) return ErrorResponse(400);
+  if (!parsedBody.openAIApiKey)
+    return ErrorResponse(400, "Missing openAIApiKey");
 
   const client = new PineconeClient();
   await client.init({
