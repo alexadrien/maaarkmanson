@@ -12,7 +12,7 @@ import {
 import SendIcon from "@mui/icons-material/Send";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { History, Message } from "./types";
-import { useSearchResult } from "./useSearchResult";
+import { useGetSearchResult } from "./useGetSearchResult";
 import { useCompletions } from "./useCompletions";
 import { useSaveToLocalStorage } from "./useSaveToLocalStorage";
 import { useGetFromLocalStorage } from "./useGetFromLocalStorage";
@@ -32,7 +32,7 @@ function App() {
   const openAIApiKey = useOpenAIApiKeyFromQueryParams();
   const [apiKey, setApiKey] = useState<string>(openAIApiKey || "");
   const [isDialogOpened, setDialogState] = useState<boolean>(false);
-  const getSearchResults = useSearchResult();
+  const getSearchResults = useGetSearchResult();
   const getCompletions = useCompletions();
   const placeholder = usePlaceholder();
 

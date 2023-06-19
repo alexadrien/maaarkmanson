@@ -6,7 +6,7 @@ import { ChatOpenAI } from "langchain/chat_models/openai";
 import { useNewPlaceholder } from "./atoms";
 import { CREATE_SIMILARITY_SEARCH } from "./prompts";
 
-export const useSearchResult = () => {
+export const useGetSearchResult = () => {
   const setPlaceholder = useNewPlaceholder();
   const searchMutation = useMutation<
     { searchResult: string },
