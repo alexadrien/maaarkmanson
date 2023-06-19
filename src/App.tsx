@@ -18,6 +18,7 @@ import { useSaveToLocalStorage } from "./useSaveToLocalStorage";
 import { useGetFromLocalStorage } from "./useGetFromLocalStorage";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { usePlaceholder } from "./atoms";
+import { useOpenAIApiKeyFromQueryParams } from "./useOpenAIApiKeyFromQueryParams";
 
 const TWITTER_URL = "https://twitter.com/MaaarkManson";
 
@@ -28,8 +29,7 @@ function App() {
   const [history, setHistory] = useState<History>(savedHistory);
   useSaveToLocalStorage(history);
   const inputRef = useRef<HTMLInputElement>(null);
-  const params = new URLSearchParams(window.location.search);
-  const openAIApiKey = params.get("openAIApiKey");
+  const openAIApiKey = useOpenAIApiKeyFromQueryParams();
   const [apiKey, setApiKey] = useState<string>(openAIApiKey || "");
   const [isDialogOpened, setDialogState] = useState<boolean>(false);
   const getSearchResults = useSearchResult();
