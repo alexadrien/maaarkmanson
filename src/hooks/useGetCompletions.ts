@@ -14,42 +14,56 @@ import {
 
 export const useGetCompletions = () => {
   const setPlaceholder = useNewPlaceholder();
+
+  const constructMessage = (message: Message) =>
+    message.author === "Human"
+      ? new HumanChatMessage(message.content)
+      : new AIChatMessage(message.content);
+
+  const constructChatHistoryForOptionGeneration = (
+    searchResult: string,
+    history: History
+  ) => [
+    new SystemChatMessage(INITIAL_SYSTEM_MESSAGE),
+    ...history.slice(0, history.length - 1).map(constructMessage),
+    new SystemChatMessage(USE_QUOTE_SYSTEM_MESSAGE(searchResult)),
+    ...history.slice(history.length - 1, history.length).map(constructMessage),
+  ];
+
+  const constructChatHistoryForOptionChoosing = (
+    chatResponseOptions: string[],
+    history: History
+  ) => [
+    new SystemChatMessage(INITIAL_SYSTEM_MESSAGE),
+    ...history.map(constructMessage),
+    new SystemChatMessage(FIND_BEST_MESSAGE(chatResponseOptions)),
+  ];
+
   return async (
     searchResults: string[],
     openAIApiKey: string,
     history: History
   ) => {
-    const chat = new ChatOpenAI({
-      temperature: 1,
-      openAIApiKey,
-    });
-    const chatResponses = [];
-    const constructMessage = (message: Message) =>
-      message.author === "Human"
-        ? new HumanChatMessage(message.content)
-        : new AIChatMessage(message.content);
+    const chat = new ChatOpenAI({ temperature: 1, openAIApiKey });
+    const chatResponseOptions = [];
+
     for (let i = 0; i < searchResults.length; i++) {
       setPlaceholder("Writing option " + (i + 1));
-      const searchResult = searchResults[i];
-      const chatResponse = await chat.call([
-        new SystemChatMessage(INITIAL_SYSTEM_MESSAGE),
-        ...history.slice(0, history.length - 1).map(constructMessage),
-        new SystemChatMessage(USE_QUOTE_SYSTEM_MESSAGE(searchResult)),
-        ...history
-          .slice(history.length - 1, history.length)
-          .map(constructMessage),
-      ]);
-      chatResponses.push(chatResponse.text);
+      const currentSearchResult = searchResults[i];
+      const chatHistory = constructChatHistoryForOptionGeneration(
+        currentSearchResult,
+        history
+      );
+      const newMessageFromAi = await chat.call(chatHistory);
+      chatResponseOptions.push(newMessageFromAi.text);
     }
 
     setPlaceholder("Finding the best message");
-    const finalChatResponse = await chat.call([
-      new SystemChatMessage(INITIAL_SYSTEM_MESSAGE),
-      ...history.map(constructMessage),
-      new SystemChatMessage(FIND_BEST_MESSAGE(chatResponses)),
-    ]);
+    const finalChatResponse = await chat.call(
+      constructChatHistoryForOptionChoosing(chatResponseOptions, history)
+    );
 
-    setPlaceholder("Oh Hi Maaark!\nMy name is");
+    setPlaceholder("Type your answer here");
     return finalChatResponse.text;
   };
 };
