@@ -17,7 +17,7 @@ import { useGetCompletions } from "./useGetCompletions";
 import { useSaveToLocalStorage } from "./useSaveToLocalStorage";
 import { useGetFromLocalStorage } from "./useGetFromLocalStorage";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { usePlaceholder } from "./atoms";
+import { useTextFieldPlaceholder } from "./atoms";
 import { useOpenAIApiKeyFromQueryParams } from "./useOpenAIApiKeyFromQueryParams";
 
 const TWITTER_URL = "https://twitter.com/MaaarkManson";
@@ -34,7 +34,7 @@ function App() {
   const [isDialogOpened, setDialogState] = useState<boolean>(false);
   const getSearchResults = useGetSearchResult();
   const getCompletions = useGetCompletions();
-  const placeholder = usePlaceholder();
+  const textFieldPlaceholder = useTextFieldPlaceholder();
 
   const onSend = async () => {
     if (!message) return;
@@ -134,7 +134,7 @@ function App() {
         <TextField
           ref={inputRef}
           multiline
-          placeholder={placeholder}
+          placeholder={textFieldPlaceholder}
           maxRows={10}
           minRows={2}
           disabled={loading}

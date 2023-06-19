@@ -5,6 +5,6 @@ export const placeholderAtom = atom({
   default: "Oh Hi Maaark!\nMy name is",
 });
 
-export const usePlaceholder = () => useRecoilValue(placeholderAtom);
+export const useTextFieldPlaceholder = () => useRecoilValue(placeholderAtom);
 
 export const useNewPlaceholder = () => useSetRecoilState(placeholderAtom);
