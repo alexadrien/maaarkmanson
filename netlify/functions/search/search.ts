@@ -20,11 +20,10 @@ const ErrorResponse: (code: number, message?: string) => Response = (
   body: message,
 });
 
-export const handler: Handler = async (event) => {
-  if (event.httpMethod !== "POST")
+export const handler: Handler = async ({ httpMethod, body }) => {
+  if (httpMethod !== "POST")
     return ErrorResponse(405, "Only POST Method allowed");
 
-  const { body } = event;
   if (!body) return ErrorResponse(400, "Request as no payload");
 
   const { openAIApiKey, history } = JSON.parse(
