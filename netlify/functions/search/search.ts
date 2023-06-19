@@ -31,12 +31,12 @@ export const handler: Handler = async ({ httpMethod, body }) => {
   if (!openAIApiKey) return ErrorResponse(400, "Missing openAIApiKey");
   if (!history) return ErrorResponse(400, "Missing history");
 
-  const client = new PineconeClient();
-  await client.init({
+  const pineconeClient = new PineconeClient();
+  await pineconeClient.init({
     apiKey: process.env.PINECONE_API_KEY || "",
     environment: process.env.PINECONE_ENVIRONMENT || "",
   });
-  const pineconeIndex = client.Index(process.env.PINECONE_INDEX || "");
+  const pineconeIndex = pineconeClient.Index(process.env.PINECONE_INDEX || "");
 
   const vectorStore = await PineconeStore.fromExistingIndex(
     new OpenAIEmbeddings({ openAIApiKey }),
