@@ -50,7 +50,7 @@ C4Model Diagram :
 </p>
 
 <p align="center">
-  <img src="https://static.swimlanes.io/9665609e271cf32b63d8df339fbd4cf0.png" alt="Sequential Diagram"/>
+  <img src="https://static.swimlanes.io/2145e330d2a2e02f7523b48b7a90f9a5.png" alt="Sequential Diagram"/>
 </p>
 
 # Installation
