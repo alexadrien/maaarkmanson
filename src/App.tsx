@@ -36,6 +36,8 @@ function App() {
   const getCompletions = useGetCompletions();
   const textFieldPlaceholder = useTextFieldPlaceholder();
 
+  const scrollMessageIntoView = () => inputRef.current?.scrollIntoView();
+
   const onSend = async () => {
     if (!message) return;
     if (!apiKey) {
@@ -54,7 +56,7 @@ function App() {
     const completions = await getCompletions(searchResults, apiKey, newHistory);
     setHistory([...newHistory, { author: "Mark", content: completions }]);
     setLoading(false);
-    inputRef.current?.scrollIntoView();
+    scrollMessageIntoView();
   };
 
   return (
