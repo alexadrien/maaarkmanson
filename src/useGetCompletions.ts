@@ -12,7 +12,7 @@ import {
   USE_QUOTE_SYSTEM_MESSAGE,
 } from "./prompts";
 
-export const useCompletions = () => {
+export const useGetCompletions = () => {
   const setPlaceholder = useNewPlaceholder();
   return async (
     searchResults: string[],

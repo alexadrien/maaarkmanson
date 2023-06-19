@@ -13,7 +13,7 @@ import SendIcon from "@mui/icons-material/Send";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { History, Message } from "./types";
 import { useGetSearchResult } from "./useGetSearchResult";
-import { useCompletions } from "./useCompletions";
+import { useGetCompletions } from "./useGetCompletions";
 import { useSaveToLocalStorage } from "./useSaveToLocalStorage";
 import { useGetFromLocalStorage } from "./useGetFromLocalStorage";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -33,7 +33,7 @@ function App() {
   const [apiKey, setApiKey] = useState<string>(openAIApiKey || "");
   const [isDialogOpened, setDialogState] = useState<boolean>(false);
   const getSearchResults = useGetSearchResult();
-  const getCompletions = useCompletions();
+  const getCompletions = useGetCompletions();
   const placeholder = usePlaceholder();
 
   const onSend = async () => {
