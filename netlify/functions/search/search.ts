@@ -2,6 +2,7 @@ import { Handler } from "@netlify/functions";
 import { OpenAIEmbeddings } from "langchain/embeddings";
 import { PineconeClient } from "@pinecone-database/pinecone";
 import { PineconeStore } from "langchain/vectorstores/pinecone";
+import { Response } from "@netlify/functions/dist/function/response";
 
 type CompletionAPIRequestBody = {
   openAIApiKey: string;
@@ -11,14 +12,18 @@ type CompletionAPIRequestBody = {
   }>;
 };
 
+const ErrorResponse: Response = {
+  statusCode: 500,
+};
+
 export const handler: Handler = async (event) => {
-  if (event.httpMethod !== "POST") return { statusCode: 500 };
+  if (event.httpMethod !== "POST") return ErrorResponse;
 
   const { body } = event;
-  if (!body) return { statusCode: 500 };
+  if (!body) return ErrorResponse;
 
   const parsedBody = JSON.parse(body) as CompletionAPIRequestBody;
-  if (!parsedBody.openAIApiKey) return { statusCode: 500 };
+  if (!parsedBody.openAIApiKey) return ErrorResponse;
 
   const client = new PineconeClient();
   await client.init({
