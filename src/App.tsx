@@ -51,8 +51,8 @@ function App() {
     setLoading(true);
     setMessage("");
     const searchResults = await getSearchResults(newHistory, apiKey);
-    const response = await getCompletions(searchResults, apiKey, newHistory);
-    setHistory([...newHistory, { author: "Mark", content: response }]);
+    const completions = await getCompletions(searchResults, apiKey, newHistory);
+    setHistory([...newHistory, { author: "Mark", content: completions }]);
     setLoading(false);
     inputRef.current?.scrollIntoView();
   };
