@@ -12,18 +12,18 @@ type CompletionAPIRequestBody = {
   }>;
 };
 
-const ErrorResponse: Response = {
-  statusCode: 500,
-};
+const ErrorResponse: (code: number) => Response = (statusCode) => ({
+  statusCode,
+});
 
 export const handler: Handler = async (event) => {
-  if (event.httpMethod !== "POST") return ErrorResponse;
+  if (event.httpMethod !== "POST") return ErrorResponse(405);
 
   const { body } = event;
-  if (!body) return ErrorResponse;
+  if (!body) return ErrorResponse(400);
 
   const parsedBody = JSON.parse(body) as CompletionAPIRequestBody;
-  if (!parsedBody.openAIApiKey) return ErrorResponse;
+  if (!parsedBody.openAIApiKey) return ErrorResponse(400);
 
   const client = new PineconeClient();
   await client.init({
