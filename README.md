@@ -43,6 +43,9 @@ Features
 
 # How it works
 
+Chain-Of-Thoughts Diagram :
+![img_2.png](img_2.png)
+
 C4Model Diagram :
 
 <p align="center">
