@@ -38,7 +38,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "CI=TRUE react-scripts build",
-    "test": "rm ./cypress/screenshots/* & npx cypress open",
+    "test": "rm ./cypress/screenshots/* & npx cypress open --e2e --browser electron",
     "eject": "react-scripts eject",
     "dev": "npx netlify-cli@latest dev"
   },
