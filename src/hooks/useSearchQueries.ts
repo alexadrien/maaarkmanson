@@ -33,14 +33,13 @@ Else, send 'N/A'.`,
   const generateSearchQueries = async (draft: string): Promise<Array<string>> =>
     nextMessage(
       [
-        ...history,
         {
           role: "user",
           content: draft,
         },
         {
           role: "user",
-          content: `Create a few search queries related to my previous message.
+          content: `Create a few search queries related to how I feel according to my previous message.
 The search queries should be delimited with a new line
 Each search query should be composed of a few keywords
 Don't output anything else than the search queries
