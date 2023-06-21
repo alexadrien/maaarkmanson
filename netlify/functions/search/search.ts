@@ -6,10 +6,7 @@ import { Response } from "@netlify/functions/dist/function/response";
 
 type SimilaritySearchRequestBody = {
   openAIApiKey: string;
-  history: Array<{
-    author: "Human" | "Mark";
-    content: string;
-  }>;
+  query: string;
 };
 
 const pineconeApiKey = process.env.PINECONE_API_KEY || "";
@@ -31,9 +28,9 @@ export const handler: Handler = async ({ httpMethod, body }) => {
   if (!body) return ErrorResponse(400, "Request as no payload");
 
   const requestBody = JSON.parse(body) as SimilaritySearchRequestBody;
-  const { openAIApiKey, history } = requestBody;
+  const { openAIApiKey, query } = requestBody;
   if (!openAIApiKey) return ErrorResponse(400, "Missing openAIApiKey");
-  if (!history) return ErrorResponse(400, "Missing history");
+  if (!query) return ErrorResponse(400, "Missing query");
 
   const pineconeClient = new PineconeClient();
   await pineconeClient.init({
@@ -49,25 +46,19 @@ export const handler: Handler = async ({ httpMethod, body }) => {
     dbConfig
   );
 
-  if (history.length < 1)
-    return ErrorResponse(400, "Not enough message in History");
-
-  const lastMessage = history[history.length - 1];
-  const lastMessageContent = lastMessage.content;
-  const similaritySearchResults = await vectorStore.similaritySearch(
-    lastMessageContent,
-    1
-  );
+  const similaritySearchResults = await vectorStore.similaritySearch(query, 1);
 
   if (similaritySearchResults.length < 1)
     return ErrorResponse(500, "Similarity search did not return any results");
 
   const firstSearchResult = similaritySearchResults[0];
-  const firstSearchResultContent = firstSearchResult.pageContent;
   return {
     statusCode: 200,
     body: JSON.stringify({
-      searchResult: firstSearchResultContent,
+      content: firstSearchResult.pageContent,
+      source: firstSearchResult.metadata.source,
+      type: firstSearchResult.metadata.type,
+      title: firstSearchResult.metadata.title,
     }),
   };
 };

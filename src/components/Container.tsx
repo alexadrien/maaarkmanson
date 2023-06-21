@@ -7,17 +7,7 @@ type IProps = {
 
 export const Container: React.FC<IProps> = ({ children }) => {
   return (
-    <MuiContainer
-      maxWidth={"sm"}
-      disableGutters
-      sx={{
-        position: "relative",
-        display: "flex",
-        flexDirection: "column",
-        minHeight: "100%",
-        maxHeight: "100%",
-      }}
-    >
+    <MuiContainer disableGutters maxWidth={"sm"}>
       {children}
     </MuiContainer>
   );

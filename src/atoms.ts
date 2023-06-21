@@ -1,10 +1,21 @@
-import { atom, useRecoilValue, useSetRecoilState } from "recoil";
+import { atom } from "recoil";
+import { History } from "./types";
+import { recoilPersist } from "recoil-persist";
 
-export const placeholderAtom = atom({
-  key: "placeholderAtom",
-  default: "Oh Hi Maaark!\nMy name is",
+const { persistAtom } = recoilPersist();
+
+export const chatHistoryAtom = atom<History>({
+  key: "chatHistoryAtom",
+  default: [],
+  effects_UNSTABLE: [persistAtom],
 });
 
-export const useTextFieldPlaceholder = () => useRecoilValue(placeholderAtom);
+export const openAiApiKeyAtom = atom<string | null>({
+  key: "openAiApiKeyAtom",
+  default: new URLSearchParams(window.location.search).get("openAIApiKey"),
+});
 
-export const useNewPlaceholder = () => useSetRecoilState(placeholderAtom);
+export const loadingAtom = atom<boolean>({
+  key: "loadingAtom",
+  default: true,
+});

@@ -24,17 +24,20 @@
     "dotenv": "^16.1.4",
     "faiss-node": "^0.2.1",
     "langchain": "^0.0.92",
+    "openai": "^3.3.0",
     "pickleparser": "^0.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-linkify": "^1.0.0-alpha",
     "react-scripts": "5.0.1",
     "recoil": "^0.7.7",
+    "recoil-persist": "^4.2.0",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "CI=TRUE react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "dev": "npx netlify-cli@latest dev"
@@ -58,6 +61,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-linkify": "^1.0.1",
     "prettier": "2.8.8"
   }
 }

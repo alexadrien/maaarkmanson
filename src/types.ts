@@ -1,6 +1,10 @@
-export type Message = {
-  author: "Human" | "Mark";
-  content: string;
-};
+import { ChatCompletionRequestMessage } from "openai/api";
 
-export type History = Array<Message>;
+export type History = Array<ChatCompletionRequestMessage>;
+
+export type SearchContent = {
+  content: string;
+  source: string;
+  title: string;
+  type: string;
+};
