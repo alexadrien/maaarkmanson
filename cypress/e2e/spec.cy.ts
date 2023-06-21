@@ -1,6 +1,15 @@
 describe("Multiple Tests", () => {
+  const messages = ["My name is Mark", "I'm feeling lonely"];
+
+  const timeoutInSeconds = 60;
+  const sendMessage = (message: string) => {
+    cy.get("textarea").eq(0).type(message);
+    cy.get("button").click();
+    cy.get("textarea", { timeout: timeoutInSeconds * 1000 }).should(
+      "not.be.disabled"
+    );
+  };
   const doABarrelRoll = () => {
-    const timeoutInSeconds = 60;
     cy.viewport(2 * 375, 2 * 667);
     cy.visit(
       `http://localhost:8888/?openAIApiKey=${Cypress.env("OPENAI_API_KEY")}`
@@ -11,11 +20,9 @@ describe("Multiple Tests", () => {
     cy.get("textarea", { timeout: timeoutInSeconds * 1000 }).should(
       "not.be.disabled"
     );
-    cy.get("textarea").eq(0).type("Hey\nI'm Mark\nI'm feeling lonely.");
-    cy.get("button").click();
-    cy.get("textarea", { timeout: timeoutInSeconds * 1000 }).should(
-      "not.be.disabled"
-    );
+    for (let i = 0; i < messages.length; i++) {
+      sendMessage(messages[i]);
+    }
     cy.screenshot();
   };
   it("Do a barrel roll-01", doABarrelRoll);
