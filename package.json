@@ -38,7 +38,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "CI=TRUE react-scripts build",
-    "test": "react-scripts test",
+    "test": "rm ./cypress/screenshots/* & npx cypress open",
     "eject": "react-scripts eject",
     "dev": "npx netlify-cli@latest dev"
   },
@@ -62,6 +62,7 @@
   },
   "devDependencies": {
     "@types/react-linkify": "^1.0.1",
+    "cypress": "^12.15.0",
     "prettier": "2.8.8"
   }
 }
