@@ -10,7 +10,7 @@ describe("Multiple Tests", () => {
     );
   };
   const doABarrelRoll = () => {
-    cy.viewport(2 * 375, 2 * 667);
+    cy.viewport(600, 1200);
     cy.visit(
       `http://localhost:8888/?openAIApiKey=${Cypress.env("OPENAI_API_KEY")}`
     );
