@@ -35,11 +35,13 @@ Add the source link of the article in your message.
 
 ${searchContent.length === 0 ? `No content found. Sorry.` : ``}
 ${searchContent.map(
-  (content, index) => `Article ${index + 1} (${content.type}) : ${content.title}
+  (content, index) => `
+Article ${index + 1} (${content.type}) : ${content.title}
 Extract: 
 ${content.content}
 Source:
-${content.source}`
+${content.source}
+`
 )}`,
       },
     ]).then((value) => value[value.length - 1]);
