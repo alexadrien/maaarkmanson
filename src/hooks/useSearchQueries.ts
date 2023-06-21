@@ -1,10 +1,7 @@
 import { useNextMessage } from "./useNextMessage";
-import { useRecoilValue } from "recoil";
-import { chatHistoryAtom } from "../atoms";
 
 export const useSearchQueries = () => {
   const { nextMessage } = useNextMessage();
-  const history = useRecoilValue(chatHistoryAtom);
   const shouldAiGenerateSearchQueries = async (
     draft: string
   ): Promise<boolean> =>
