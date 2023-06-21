@@ -13,25 +13,30 @@ export const useRecommendation = () => {
   const { search } = useSearchVectorDatabase();
   const getRecommendationMessage = async (draft: string) => {
     const searchQueries = await generateSearchQueries(draft);
-    let searchResults: SearchContent[] = [];
-    for (let i = 0; i < searchQueries.length; i++) {
+    let searchResultsMap: Map<string, SearchContent> = new Map();
+    for (let i = searchQueries.length - 1; i > -1; i--) {
       const searchQuery = searchQueries[i];
       const response = await search(searchQuery);
-      if (response) searchResults = [...searchResults, response];
+      if (response) searchResultsMap.set(response.source, response);
     }
-    return askForRecommendationMessage(draft, searchResults);
+    return askForRecommendationMessage(
+      draft,
+      Array.from(searchResultsMap.values())
+    );
   };
   const askForRecommendationMessage = async (
     draft: string,
     searchContent: SearchContent[]
   ): Promise<ChatCompletionRequestMessage> =>
-    nextMessage([
-      ...history,
-      { role: "user", content: draft },
-      {
-        role: "user",
-        content: `Given my previous message and the following extracts of Mark Manson's website, help me by recommending me to read some content written by Mark Manson's.
+    nextMessage(
+      [
+        ...history,
+        { role: "user", content: draft },
+        {
+          role: "user",
+          content: `Given my previous message and the following extracts of Mark Manson's website, help me by recommending me to read of the content below.
 Add the source link of the article in your message.
+Each link should appear only once in your message.
 
 ${searchContent.length === 0 ? `No content found. Sorry.` : ``}
 ${searchContent.map(
@@ -43,7 +48,9 @@ Source:
 ${content.source}
 `
 )}`,
-      },
-    ]).then((value) => value[value.length - 1]);
+        },
+      ],
+      0
+    ).then((value) => value[value.length - 1]);
   return { askForRecommendationMessage, getRecommendationMessage };
 };
