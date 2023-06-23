@@ -1,7 +1,10 @@
-describe("Multiple Tests", () => {
-  const messages = ["My name is Mark", "I'm feeling lonely"];
+describe("Tests", () => {
+  const scenarios = [
+    ["I'm good how are you?"],
+    ["I'm Paul\n I'm feeling lonely today."],
+  ];
 
-  const timeoutInSeconds = 60;
+  const timeoutInSeconds = 120;
   const sendMessage = (message: string) => {
     cy.get("textarea").eq(0).type(message);
     cy.get("button").click();
@@ -9,7 +12,7 @@ describe("Multiple Tests", () => {
       "not.be.disabled"
     );
   };
-  const doABarrelRoll = () => {
+  const doABarrelRoll = (messages: string[]) => () => {
     cy.viewport(600, 1200);
     cy.visit(
       `http://localhost:8888/?openAIApiKey=${Cypress.env("OPENAI_API_KEY")}`
@@ -25,14 +28,16 @@ describe("Multiple Tests", () => {
     }
     cy.screenshot();
   };
-  it("Do a barrel roll-01", doABarrelRoll);
-  it("Do a barrel roll-02", doABarrelRoll);
-  it("Do a barrel roll-03", doABarrelRoll);
-  it("Do a barrel roll-04", doABarrelRoll);
-  it("Do a barrel roll-05", doABarrelRoll);
-  it("Do a barrel roll-06", doABarrelRoll);
-  it("Do a barrel roll-07", doABarrelRoll);
-  it("Do a barrel roll-08", doABarrelRoll);
-  it("Do a barrel roll-09", doABarrelRoll);
-  it("Do a barrel roll-10", doABarrelRoll);
+  scenarios.forEach((scenario, index) => {
+    it(`Scenario-${index}`, doABarrelRoll(scenario));
+    it(`Scenario-${index}`, doABarrelRoll(scenario));
+    it(`Scenario-${index}`, doABarrelRoll(scenario));
+    it(`Scenario-${index}`, doABarrelRoll(scenario));
+    it(`Scenario-${index}`, doABarrelRoll(scenario));
+    it(`Scenario-${index}`, doABarrelRoll(scenario));
+    it(`Scenario-${index}`, doABarrelRoll(scenario));
+    it(`Scenario-${index}`, doABarrelRoll(scenario));
+    it(`Scenario-${index}`, doABarrelRoll(scenario));
+    it(`Scenario-${index}`, doABarrelRoll(scenario));
+  });
 });
