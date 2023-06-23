@@ -14,9 +14,11 @@ export const useSearchQueries = () => {
         {
           role: "user",
           content: `If my previous message mentions topics related to Mark Manson's work, send 'RELATED_TO_MARK_MANSON_WORK'.
-If my previous message mentions how I feel, send 'RELATED_TO_MARK_MANSON_WORK'.
 If my previous message is only a courtesy message, send 'N/A'.
-If you need clarification to be able to tel if my previous message mentions topics related to Mark Manson's work, send 'N/A'.
+If my previous message is only a greeting and/or an inquiry about your well-being, send 'N/A'.
+If my previous message contains only small talk, send 'N/A'.
+If you need clarification to be able to tell if my previous message mentions topics related to Mark Manson's work, send 'N/A'.
+If my previous message mentions how I feel, send 'RELATED_TO_MARK_MANSON_WORK'.
 Else, send 'N/A'.`,
         },
       ],
