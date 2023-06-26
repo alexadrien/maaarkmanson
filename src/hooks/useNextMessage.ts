@@ -17,8 +17,8 @@ export const useNextMessage = () => {
       frequency_penalty: 0,
       presence_penalty: 0,
     };
-    const url =
-      "https://y8cb4yzvzh.execute-api.us-east-1.amazonaws.com/chat/completions";
+    const baseUrl = process.env.API_BASE_URL || "";
+    const url = `${baseUrl}/chat/completions`;
     const chatCompletion: CreateChatCompletionResponse = await axios
       .post(url, completionRequest)
       .then((res) => res.data);
