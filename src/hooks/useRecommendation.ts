@@ -12,7 +12,7 @@ export const useRecommendation = () => {
   const { generateSearchQueries } = useSearchQueries();
   const { search } = useSearchVectorDatabase();
   const getRecommendationMessage = async (draft: string) => {
-    const searchQueries = await generateSearchQueries(draft);
+    const searchQueries = [...(await generateSearchQueries(draft)), draft];
     let searchResultsMap: Map<string, SearchContent> = new Map();
     for (let i = searchQueries.length - 1; i > -1; i--) {
       const searchQuery = searchQueries[i];
