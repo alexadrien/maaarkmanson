@@ -3,7 +3,6 @@ import {useRecoilValue, useSetRecoilState} from "recoil";
 import {chatHistoryAtom, loadingAtom} from "../atoms";
 import {useEffect} from "react";
 import {useNextMessage} from "./useNextMessage";
-import {NO_OPEN_AI_INSTRUCTION} from "../errors";
 
 export const useFirstMessage = () => {
   const history = useRecoilValue(chatHistoryAtom);
@@ -36,7 +35,6 @@ I don't want you to :
         setLoadingState(false);
       })
       .catch((reason: unknown) => {
-        window.alert(NO_OPEN_AI_INSTRUCTION);
         throw reason;
       });
   }, []);
