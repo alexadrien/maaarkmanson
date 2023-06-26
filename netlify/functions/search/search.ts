@@ -12,6 +12,7 @@ type SimilaritySearchRequestBody = {
 const pineconeApiKey = process.env.PINECONE_API_KEY || "";
 const pineconeEnvironment = process.env.PINECONE_ENVIRONMENT || "";
 const pineconeIndexName = process.env.PINECONE_INDEX || "";
+const openAIApiKey = process.env.OPEN_AI_API_KEY || "";
 
 const ErrorResponse: (code: number, message?: string) => Response = (
   statusCode,
@@ -28,8 +29,7 @@ export const handler: Handler = async ({ httpMethod, body }) => {
   if (!body) return ErrorResponse(400, "Request as no payload");
 
   const requestBody = JSON.parse(body) as SimilaritySearchRequestBody;
-  const { openAIApiKey, query } = requestBody;
-  if (!openAIApiKey) return ErrorResponse(400, "Missing openAIApiKey");
+  const { query } = requestBody;
   if (!query) return ErrorResponse(400, "Missing query");
 
   const pineconeClient = new PineconeClient();
