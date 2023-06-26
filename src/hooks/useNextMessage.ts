@@ -17,7 +17,7 @@ export const useNextMessage = () => {
       frequency_penalty: 0,
       presence_penalty: 0,
     };
-    const baseUrl = process.env.API_BASE_URL || "";
+    const baseUrl = process.env.REACT_APP_API_BASE_URL || "";
     const url = `${baseUrl}/chat/completions`;
     const chatCompletion: CreateChatCompletionResponse = await axios
       .post(url, completionRequest)
