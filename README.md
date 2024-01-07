@@ -9,9 +9,9 @@ informative conversation experience.
   <img src="https://raw.githubusercontent.com/alexadrien/maaarkmanson/master/img.png?raw=true" alt="Maaark"/>
 </p>
 
-Twitter : https://twitter.com/MaaarkManson
+Twitter : (Redacted)
 
-Deployed Version : https://maaarkmanson.net
+Deployed Version : (Disabled)
 
 # Introduction
 
